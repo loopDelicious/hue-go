@@ -25,7 +25,30 @@ module.exports = {
             return true
         }
         client.expire(ip, 10)
+    },
 
+    notValidStatus: function (on) {
+        if (typeof (on) === "boolean") {
+            return false
+        } else {
+            return true
+        }
+    },
 
+    notValidBriOrSat: function (bri) {
+        if (Number.isInteger(bri) && 0 < bri < 284) {
+            return false
+        } else {
+            return true
+        }
+    },
+
+    notValidHue: function (hue) {
+        if (Number.isInteger(hue) && 0 < hue < 60000) {
+            return false
+        } else {
+            return true
+        }
     }
+
 }
