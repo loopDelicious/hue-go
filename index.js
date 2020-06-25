@@ -14,39 +14,41 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.post('/', async (req, res) => {
 
     // check rate limit
-    let ip = req.ip
-    let overLimit = await utilities.isOverLimit(ip)
+    let overLimit = await utilities.isOverLimit(req.ip)
     if (overLimit) {
         res.status(429).send('Too many requests - try again later')
         return
     }
 
     // check ON/OFF input
-    let invalidStatus = await utilities.notValidStatus(req.body.on)
-    if (invalidStatus) {
-        res.status(422).send("Input true or false for `on` property")
+    if (!['undefined', 'boolean'].includes(typeof req.body.on)) {
+        res.status(400).send("Input true or false for `on` property")
         return
     }
 
     // check saturation input
-    let invalidSaturation = await utilities.notValidBriOrSat(req.body.sat)
-    if (invalidSaturation) {
-        res.status(422).send('Valid saturation required')
-        return
+    if (req.body.hasOwnProperty("sat")) {
+        if (!(Number.isInteger(req.body.sat) && (0 < req.body.sat < 284))) {
+            res.status(400).send('Valid saturation required')
+            return
+        }
     }
 
     // check brightness input 
-    let invalidBrightness = await utilities.notValidBriOrSat(req.body.bri)
-    if (invalidBrightness) {
-        res.status(422).send('Valid brightness required')
-        return
+    if (req.body.hasOwnProperty("bri")) {
+        if (!(Number.isInteger(req.body.bri) && (0 < req.body.bri < 284))) {
+            res.status(400).send('Valid brightness required')
+            return
+        }
     }
 
     // check hue input
-    let invalidHue = await utilities.notValidHue(req.body.hue)
-    if (invalidHue) {
-        res.status(422).send('Valid hue required')
-        return
+    if (req.body.hasOwnProperty("hue")) {
+        console.log('huey')
+        if (!(Number.isInteger(req.body.hue) && (0 < req.body.hue < 60000))) {
+            res.status(400).send('Valid hue required')
+            return
+        }
     }
 
     let hueLightID = 4
@@ -56,10 +58,10 @@ app.post('/', async (req, res) => {
             method: "PUT",
             json: true,
             body: {
-                on: !invalidStatus ? req.body.on : false,
-                sat: !invalidSaturation ? req.body.sat : 284,
-                bri: !invalidBrightness ? req.body.bri : 284,
-                hue: !invalidHue ? req.body.hue : 30000
+                on: req.body.on || false,
+                sat: req.body.sat || 284,
+                bri: req.body.bri || 284,
+                hue: req.body.hue || 30000
             }
         })
     } catch (err) {
