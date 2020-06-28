@@ -4,9 +4,9 @@ const utilities = require('./utilities')
 const request = require('request-promise-native')
 const port = process.env.PORT || 3001
 const hueIP = process.env.HUE_IP || '192.168.1.80'
-const hueUser = process.env.HUE_USER ||
+const hueUser = process.env.HUE_USER // or add a new HUE_USER here
 
-    app.use(express.json())
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => res.send('Hello World!'))

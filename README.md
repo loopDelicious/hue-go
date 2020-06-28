@@ -18,7 +18,7 @@ Optional environment variables to set
 Install dependencies and start local server
 
     $ npm install
-    $ npm run server
+    $ npm run start
 
 Start local redis
 
