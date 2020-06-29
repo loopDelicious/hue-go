@@ -4,7 +4,7 @@ const utilities = require('./utilities')
 const request = require('request-promise-native')
 const port = process.env.PORT || 3001
 const hueIP = process.env.HUE_IP || '192.168.1.80'
-const hueUser = process.env.HUE_USER // or add a new HUE_USER here
+const hueUser = process.env.HUE_USER || 'T4O8humbfa7kVW2uGAYHyvimLcWP7lnHlDOe-8Sh'
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -59,8 +59,8 @@ app.post('/', async (req, res) => {
             json: true,
             body: {
                 on: req.body.on || false,
-                sat: req.body.sat || 284,
-                bri: req.body.bri || 284,
+                sat: req.body.sat || 254,
+                bri: req.body.bri || 254,
                 hue: req.body.hue || 30000
             }
         })
